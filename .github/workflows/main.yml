@@ -1,0 +1,39 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button, Switch, FlatList } from 'react-native';
+
+const App = () => {
+  const [mood, setMood] = useState('');
+  const [moodHistory, setMoodHistory] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
+
+  const handleMoodSubmit = () => {
+    if (mood) {
+      setMoodHistory([...moodHistory, { id: Date.now().toString(), mood }]);
+      setMood('');
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, padding: 20, backgroundColor: darkMode ? '#222' : '#fff' }}>
+      <Text style={{ fontSize: 24, color: darkMode ? '#fff' : '#000' }}>Registro de Humor</Text>
+      <TextInput
+        placeholder="Como você está se sentindo hoje?"
+        value={mood}
+        onChangeText={setMood}
+        style={{ borderWidth: 1, padding: 10, marginVertical: 10 }}
+      />
+      <Button title="Salvar Humor" onPress={handleMoodSubmit} />
+      <FlatList
+        data={moodHistory}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <Text style={{ padding: 5, color: darkMode ? '#fff' : '#000' }}>{item.mood}</Text>}
+      />
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
+        <Text style={{ color: darkMode ? '#fff' : '#000' }}>Modo Noturno</Text>
+        <Switch value={darkMode} onValueChange={setDarkMode} />
+      </View>
+    </View>
+  );
+};
+
+export default App;
